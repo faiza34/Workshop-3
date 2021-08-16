@@ -9,3 +9,50 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+<!--Task 2-->
+
+# "Tutorial 3"
+
+```{r}
+library(tidyverse)
+library(skimr)
+library(janitor)
+
+survey <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-05-18/survey.csv")
+
+survey%>%head()
+
+survey %>%
+  filter(how_old_are_you=="25-34")
+
+survey %>%
+  filter(how_old_are_you=="25-34" & annual_salary>80000)
+
+survey %>%
+  filter(industry=="Computing or Tech" | annual_salary>80000)
+
+survey%>%top_n(10, annual_salary)
+
+survey%>%arrange(annual_salary)
+
+survey%>%
+  select(how_old_are_you, industry, annual_salary)
+
+survey%>%
+  select(how_old_are_you, industry, annual_salary)%>%
+  filter(how_old_are_you=="25-34" & annual_salary>80000)
+ 
+survey_new<-survey%>%
+  mutate(age=parse_number(how_old_are_you))
+
+survey_new%>%
+  group_by(industry)%>%
+  summarise(mean_age=mean(age))
+
+survey%>%
+  count(country)
+
+```
+<!--skim function gives the data summary of all variables-->
+
+<!--The glimpse function gives the total rows and total columns along with descripion of variables in an untidy way while the head function gives a tidy table which is consist of 6 rows and also shows the total columns and rows in separate R console -->

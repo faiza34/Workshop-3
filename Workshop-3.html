@@ -171,7 +171,223 @@ pre code {
 </div>
 
 
+<!--Task 2-->
+<div id="tutorial-3" class="section level1">
+<h1>“Tutorial 3”</h1>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## -- Attaching packages --------------------------------------- tidyverse 1.3.1 --</code></pre>
+<pre><code>## v ggplot2 3.3.5     v purrr   0.3.4
+## v tibble  3.1.3     v dplyr   1.0.7
+## v tidyr   1.1.3     v stringr 1.4.0
+## v readr   2.0.0     v forcats 0.5.1</code></pre>
+<pre><code>## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(skimr)
+library(janitor)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;janitor&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     chisq.test, fisher.test</code></pre>
+<pre class="r"><code>survey &lt;- read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-05-18/survey.csv&quot;)</code></pre>
+<pre><code>## Rows: 26232 Columns: 18</code></pre>
+<pre><code>## -- Column specification --------------------------------------------------------
+## Delimiter: &quot;,&quot;
+## chr (16): timestamp, how_old_are_you, industry, job_title, additional_contex...
+## dbl  (2): annual_salary, other_monetary_comp</code></pre>
+<pre><code>## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>survey%&gt;%head()</code></pre>
+<pre><code>## # A tibble: 6 x 18
+##   timestamp  how_old_are_you industry  job_title  additional_cont~ annual_salary
+##   &lt;chr&gt;      &lt;chr&gt;           &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;                    &lt;dbl&gt;
+## 1 4/27/2021~ 25-34           Educatio~ Research ~ &lt;NA&gt;                     55000
+## 2 4/27/2021~ 25-34           Computin~ Change &amp; ~ &lt;NA&gt;                     54600
+## 3 4/27/2021~ 25-34           Accounti~ Marketing~ &lt;NA&gt;                     34000
+## 4 4/27/2021~ 25-34           Nonprofi~ Program M~ &lt;NA&gt;                     62000
+## 5 4/27/2021~ 25-34           Accounti~ Accountin~ &lt;NA&gt;                     60000
+## 6 4/27/2021~ 25-34           Educatio~ Scholarly~ &lt;NA&gt;                     62000
+## # ... with 12 more variables: other_monetary_comp &lt;dbl&gt;, currency &lt;chr&gt;,
+## #   currency_other &lt;chr&gt;, additional_context_on_income &lt;chr&gt;, country &lt;chr&gt;,
+## #   state &lt;chr&gt;, city &lt;chr&gt;, overall_years_of_professional_experience &lt;chr&gt;,
+## #   years_of_experience_in_field &lt;chr&gt;,
+## #   highest_level_of_education_completed &lt;chr&gt;, gender &lt;chr&gt;, race &lt;chr&gt;</code></pre>
+<pre class="r"><code>survey %&gt;%
+  filter(how_old_are_you==&quot;25-34&quot;)</code></pre>
+<pre><code>## # A tibble: 11,748 x 18
+##    timestamp  how_old_are_you industry  job_title additional_cont~ annual_salary
+##    &lt;chr&gt;      &lt;chr&gt;           &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;                    &lt;dbl&gt;
+##  1 4/27/2021~ 25-34           Educatio~ Research~ &lt;NA&gt;                     55000
+##  2 4/27/2021~ 25-34           Computin~ Change &amp;~ &lt;NA&gt;                     54600
+##  3 4/27/2021~ 25-34           Accounti~ Marketin~ &lt;NA&gt;                     34000
+##  4 4/27/2021~ 25-34           Nonprofi~ Program ~ &lt;NA&gt;                     62000
+##  5 4/27/2021~ 25-34           Accounti~ Accounti~ &lt;NA&gt;                     60000
+##  6 4/27/2021~ 25-34           Educatio~ Scholarl~ &lt;NA&gt;                     62000
+##  7 4/27/2021~ 25-34           Publishi~ Publishi~ &lt;NA&gt;                     33000
+##  8 4/27/2021~ 25-34           Educatio~ Librarian High school, FT          50000
+##  9 4/27/2021~ 25-34           Nonprofi~ Office M~ &lt;NA&gt;                     47500
+## 10 4/27/2021~ 25-34           Law       Legal Ai~ non-profit law ~         52000
+## # ... with 11,738 more rows, and 12 more variables: other_monetary_comp &lt;dbl&gt;,
+## #   currency &lt;chr&gt;, currency_other &lt;chr&gt;, additional_context_on_income &lt;chr&gt;,
+## #   country &lt;chr&gt;, state &lt;chr&gt;, city &lt;chr&gt;,
+## #   overall_years_of_professional_experience &lt;chr&gt;,
+## #   years_of_experience_in_field &lt;chr&gt;,
+## #   highest_level_of_education_completed &lt;chr&gt;, gender &lt;chr&gt;, race &lt;chr&gt;</code></pre>
+<pre class="r"><code>survey %&gt;%
+  filter(how_old_are_you==&quot;25-34&quot; &amp; annual_salary&gt;80000)</code></pre>
+<pre><code>## # A tibble: 4,463 x 18
+##    timestamp  how_old_are_you industry  job_title additional_cont~ annual_salary
+##    &lt;chr&gt;      &lt;chr&gt;           &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;                    &lt;dbl&gt;
+##  1 4/27/2021~ 25-34           Accounti~ Financia~ &lt;NA&gt;                    230000
+##  2 4/27/2021~ 25-34           Computin~ Principa~ &lt;NA&gt;                    187500
+##  3 4/27/2021~ 25-34           Computin~ Intellig~ &lt;NA&gt;                    110000
+##  4 4/27/2021~ 25-34           Engineer~ Engineer~ &lt;NA&gt;                    120000
+##  5 4/27/2021~ 25-34           Retail    Manager,~ &lt;NA&gt;                     97500
+##  6 4/27/2021~ 25-34           Marketin~ Senior M~ &lt;NA&gt;                     95000
+##  7 4/27/2021~ 25-34           Governme~ Program ~ &lt;NA&gt;                    115000
+##  8 4/27/2021~ 25-34           Business~ Account ~ Program Manager~        100500
+##  9 4/27/2021~ 25-34           Nonprofi~ Manager,~ This is NOT a n~         84000
+## 10 4/27/2021~ 25-34           Governme~ City Res~ Public Health R~         87000
+## # ... with 4,453 more rows, and 12 more variables: other_monetary_comp &lt;dbl&gt;,
+## #   currency &lt;chr&gt;, currency_other &lt;chr&gt;, additional_context_on_income &lt;chr&gt;,
+## #   country &lt;chr&gt;, state &lt;chr&gt;, city &lt;chr&gt;,
+## #   overall_years_of_professional_experience &lt;chr&gt;,
+## #   years_of_experience_in_field &lt;chr&gt;,
+## #   highest_level_of_education_completed &lt;chr&gt;, gender &lt;chr&gt;, race &lt;chr&gt;</code></pre>
+<pre class="r"><code>survey %&gt;%
+  filter(industry==&quot;Computing or Tech&quot; | annual_salary&gt;80000)</code></pre>
+<pre><code>## # A tibble: 12,997 x 18
+##    timestamp  how_old_are_you industry  job_title additional_cont~ annual_salary
+##    &lt;chr&gt;      &lt;chr&gt;           &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;                    &lt;dbl&gt;
+##  1 4/27/2021~ 25-34           Computin~ Change &amp;~ &lt;NA&gt;                     54600
+##  2 4/27/2021~ 45-54           Computin~ Systems ~ Data developer/~        112000
+##  3 4/27/2021~ 35-44           Accounti~ Manager ~ &lt;NA&gt;                    100000
+##  4 4/27/2021~ 35-44           Business~ Executiv~ &lt;NA&gt;                     85000
+##  5 4/27/2021~ 35-44           Business~ Senior M~ &lt;NA&gt;                     98000
+##  6 4/27/2021~ 35-44           Governme~ Research~ &lt;NA&gt;                     96000
+##  7 4/27/2021~ 35-44           Governme~ Economist &lt;NA&gt;                    140000
+##  8 4/27/2021~ 35-44           Media &amp; ~ Editor    &lt;NA&gt;                    125000
+##  9 4/27/2021~ 25-34           Accounti~ Financia~ &lt;NA&gt;                    230000
+## 10 4/27/2021~ 35-44           Accounti~ Accounti~ &lt;NA&gt;                    110000
+## # ... with 12,987 more rows, and 12 more variables: other_monetary_comp &lt;dbl&gt;,
+## #   currency &lt;chr&gt;, currency_other &lt;chr&gt;, additional_context_on_income &lt;chr&gt;,
+## #   country &lt;chr&gt;, state &lt;chr&gt;, city &lt;chr&gt;,
+## #   overall_years_of_professional_experience &lt;chr&gt;,
+## #   years_of_experience_in_field &lt;chr&gt;,
+## #   highest_level_of_education_completed &lt;chr&gt;, gender &lt;chr&gt;, race &lt;chr&gt;</code></pre>
+<pre class="r"><code>survey%&gt;%top_n(10, annual_salary)</code></pre>
+<pre><code>## # A tibble: 10 x 18
+##    timestamp  how_old_are_you industry job_title additional_conte~ annual_salary
+##    &lt;chr&gt;      &lt;chr&gt;           &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;                     &lt;dbl&gt;
+##  1 4/27/2021~ 25-34           Utiliti~ Operatio~ &lt;NA&gt;                  102000000
+##  2 4/27/2021~ 25-34           Retail   Complian~ &lt;NA&gt;                   11500000
+##  3 4/27/2021~ 25-34           Educati~ Native E~ &lt;NA&gt;                   27000000
+##  4 4/28/2021~ 55-64           Educati~ Regional~ &lt;NA&gt;                  870000000
+##  5 4/28/2021~ 25-34           Computi~ Backend ~ Custom Linux dis~       8800000
+##  6 4/29/2021~ 35-44           Media &amp;~ TOEIC Te~ Only for test-pr~      38000000
+##  7 4/29/2021~ 25-34           Educati~ Research~ Junior researcher     180000000
+##  8 5/1/2021 ~ 35-44           ESL Tea~ ESL Engl~ &lt;NA&gt;                   36000000
+##  9 5/3/2021 ~ 35-44           Law      Legal Ed~ I provide langua~      43800000
+## 10 5/5/2021 ~ 25-34           Enterta~ Voice Ac~ Voice acting for~      20800000
+## # ... with 12 more variables: other_monetary_comp &lt;dbl&gt;, currency &lt;chr&gt;,
+## #   currency_other &lt;chr&gt;, additional_context_on_income &lt;chr&gt;, country &lt;chr&gt;,
+## #   state &lt;chr&gt;, city &lt;chr&gt;, overall_years_of_professional_experience &lt;chr&gt;,
+## #   years_of_experience_in_field &lt;chr&gt;,
+## #   highest_level_of_education_completed &lt;chr&gt;, gender &lt;chr&gt;, race &lt;chr&gt;</code></pre>
+<pre class="r"><code>survey%&gt;%arrange(annual_salary)</code></pre>
+<pre><code>## # A tibble: 26,232 x 18
+##    timestamp  how_old_are_you industry  job_title additional_cont~ annual_salary
+##    &lt;chr&gt;      &lt;chr&gt;           &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;                    &lt;dbl&gt;
+##  1 4/27/2021~ 35-44           Stay-at-~ &quot;\&quot;mum\&quot;~ &lt;NA&gt;                         0
+##  2 4/27/2021~ 35-44           Nonprofi~ &quot;Executi~ &lt;NA&gt;                         0
+##  3 4/28/2021~ 35-44           Law       &quot;Attorne~ I am an equity ~             0
+##  4 4/28/2021~ 25-34           Educatio~ &quot;Student~ Am training to ~             0
+##  5 4/28/2021~ 18-24           Computin~ &quot;Product~ &lt;NA&gt;                         0
+##  6 4/28/2021~ 45-54           Educatio~ &quot;Househu~ &lt;NA&gt;                         0
+##  7 4/29/2021~ 45-54           Computin~ &quot;Founder&quot; &lt;NA&gt;                         0
+##  8 4/29/2021~ 35-44           Marketin~ &quot;Unemplo~ &lt;NA&gt;                         0
+##  9 5/1/2021 ~ 25-34           Nonprofi~ &quot;Governm~ &lt;NA&gt;                         0
+## 10 5/3/2021 ~ 25-34           Business~ &quot;Realtor&quot; &lt;NA&gt;                         0
+## # ... with 26,222 more rows, and 12 more variables: other_monetary_comp &lt;dbl&gt;,
+## #   currency &lt;chr&gt;, currency_other &lt;chr&gt;, additional_context_on_income &lt;chr&gt;,
+## #   country &lt;chr&gt;, state &lt;chr&gt;, city &lt;chr&gt;,
+## #   overall_years_of_professional_experience &lt;chr&gt;,
+## #   years_of_experience_in_field &lt;chr&gt;,
+## #   highest_level_of_education_completed &lt;chr&gt;, gender &lt;chr&gt;, race &lt;chr&gt;</code></pre>
+<pre class="r"><code>survey%&gt;%
+  select(how_old_are_you, industry, annual_salary)</code></pre>
+<pre><code>## # A tibble: 26,232 x 3
+##    how_old_are_you industry                      annual_salary
+##    &lt;chr&gt;           &lt;chr&gt;                                 &lt;dbl&gt;
+##  1 25-34           Education (Higher Education)          55000
+##  2 25-34           Computing or Tech                     54600
+##  3 25-34           Accounting, Banking &amp; Finance         34000
+##  4 25-34           Nonprofits                            62000
+##  5 25-34           Accounting, Banking &amp; Finance         60000
+##  6 25-34           Education (Higher Education)          62000
+##  7 25-34           Publishing                            33000
+##  8 25-34           Education (Primary/Secondary)         50000
+##  9 45-54           Computing or Tech                    112000
+## 10 35-44           Accounting, Banking &amp; Finance         45000
+## # ... with 26,222 more rows</code></pre>
+<pre class="r"><code>survey%&gt;%
+  select(how_old_are_you, industry, annual_salary)%&gt;%
+  filter(how_old_are_you==&quot;25-34&quot; &amp; annual_salary&gt;80000)</code></pre>
+<pre><code>## # A tibble: 4,463 x 3
+##    how_old_are_you industry                             annual_salary
+##    &lt;chr&gt;           &lt;chr&gt;                                        &lt;dbl&gt;
+##  1 25-34           Accounting, Banking &amp; Finance               230000
+##  2 25-34           Computing or Tech                           187500
+##  3 25-34           Computing or Tech                           110000
+##  4 25-34           Engineering or Manufacturing                120000
+##  5 25-34           Retail                                       97500
+##  6 25-34           Marketing, Advertising &amp; PR                  95000
+##  7 25-34           Government and Public Administration        115000
+##  8 25-34           Business or Consulting                      100500
+##  9 25-34           Nonprofits                                   84000
+## 10 25-34           Government and Public Administration         87000
+## # ... with 4,453 more rows</code></pre>
+<pre class="r"><code>survey_new&lt;-survey%&gt;%
+  mutate(age=parse_number(how_old_are_you))
 
+survey_new%&gt;%
+  group_by(industry)%&gt;%
+  summarise(mean_age=mean(age))</code></pre>
+<pre><code>## # A tibble: 1,069 x 2
+##    industry                               mean_age
+##    &lt;chr&gt;                                     &lt;dbl&gt;
+##  1 &quot;\&quot;Government Relations\&quot; (Lobbying)&quot;      35  
+##  2 &quot;Academia&quot;                                 25  
+##  3 &quot;Academia--cell and molecular biology&quot;     25  
+##  4 &quot;Academia - STEM&quot;                          25  
+##  5 &quot;Academia / Research&quot;                      25  
+##  6 &quot;Academic Medicine&quot;                        25  
+##  7 &quot;Academic Press Production&quot;                35  
+##  8 &quot;academic publishing&quot;                      35  
+##  9 &quot;Academic publishing&quot;                      31.7
+## 10 &quot;Academic Publishing&quot;                      25  
+## # ... with 1,059 more rows</code></pre>
+<pre class="r"><code>survey%&gt;%
+  count(country)</code></pre>
+<pre><code>## # A tibble: 294 x 2
+##    country                                       n
+##    &lt;chr&gt;                                     &lt;int&gt;
+##  1 &quot;$2,175.84/year is deducted for benefits&quot;     1
+##  2 &quot;\U0001f1fa\U0001f1f8&quot;                        3
+##  3 &quot;Afghanistan&quot;                                 1
+##  4 &quot;Africa&quot;                                      1
+##  5 &quot;america&quot;                                     1
+##  6 &quot;America&quot;                                    20
+##  7 &quot;Argentina&quot;                                   4
+##  8 &quot;ARGENTINA BUT MY ORG IS IN THAILAND&quot;         1
+##  9 &quot;Australi&quot;                                    1
+## 10 &quot;australia&quot;                                   3
+## # ... with 284 more rows</code></pre>
+<!--skim function gives the data summary of all variables-->
+<!--The glimpse function gives the total rows and total columns along with descripion of variables in an untidy way while the head function gives a tidy table which is consist of 6 rows and also shows the total columns and rows in separate R console -->
+</div>
 
 
 
